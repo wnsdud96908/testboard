@@ -3,19 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <
-</head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
 <body>
 <div id="board">
-    <form action="/add" method="post">
+    <form action="/board/list" method="post">
     제목: <input type="text" name="title">
     가게이름: <input type="text" name="store_name">
     별점: <input type="text" name="star">
     닉네임: <input type="text" name="nick">
+        <div class="img-preview">
+            <img id="img-preview" src="" alt="">
+            <input id="img-url" type="hidden" name="url">
+        </div>
+    이미지: <input id="img" type="file" accept="image/*">
     내용: <input type="text" name="content">
     <button type="submit">등록</button>
     </form>
+
+
+    </div>
+
 </div>
-<!--<script src="/board.js"></script>-->
+<script>
+    if(document.getElementById('img')){
+        document.getElementById('img').addEventListener('change',function(e){
+            const formData = new FormData();
+            console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            axios.post('/board/img', formData)
+                .then((res) => {
+                    document.getElementById('img-url').value = res.data.url;
+                    document.getElementById('img-preview').src = res.data.url;
+                    document.getElementById('img-preview').style.display = 'inline';
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+    }
+
+    // <div className="img-preview">
+    //     <img id="img-preview" src="" alt="">
+    //         <input id="img-url" type="text">
+    // </div>
+
+</script>
+
+
 </body>
 </html>

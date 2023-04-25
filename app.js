@@ -5,10 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const nunjucks = require('nunjucks');
 var indexRouter = require('./routes/index');
-var listRouter = require('./routes/list');
+const fs = require('fs');
+
 const boardRouter = require('./routes/board');
+const multer = require("multer");
 
 var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,10 +25,9 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
-app.use('/list', listRouter);
 app.use('/board', boardRouter);
 
 // catch 404 and forward to error handler
@@ -43,5 +45,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
 
 module.exports = app;
