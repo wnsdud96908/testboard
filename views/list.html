@@ -1,76 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <title>목록</title>
 </head>
 <style>
-  *{
-    text-decoration: none;
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
+    * {
+        text-decoration: none;
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
 
-  }
-  div {
-    /*border: 1px solid black;*/
-  }
-  #a {
-    height: 100%;
-    /*display: flex;*/
-    flex-direction: column;
-    align-items: center;
-    padding: 50px;
+    }
 
-  }
-  footer {
-    height: 200px;
-  }
-  #b {
-    margin: 0 auto;
-    height: 80% auto;
-    width: 80% auto;
-    padding: 20px;
-  }
-  #c {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    border: 1px solid black;
-  }
-  #c1{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    border: none;
-  }
-  #c2{
-    display: flex;
-  }
+    div {
+        /*border: 1px solid black;*/
+    }
 
-  textarea{
-    display: block;
-    width: 80%;
-    margin: 0 auto;
-  }
-  .img{
-    width: 100px;
-  }
-  li {
-    margin: 10px;
+    #a {
+        height: 100%;
+        /*display: flex;*/
+        flex-direction: column;
+        align-items: center;
+        padding: 50px;
 
-  }
-  ul{
-    display: inline-flex;
+    }
+
+    footer {
+        height: 200px;
+    }
+
+    #b {
+        margin: 0 auto;
+        height: 80% auto;
+        width: 80% auto;
+        padding: 20px;
+    }
+
+    #c {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: 1px solid black;
+    }
+
+    #c1 {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        border: none;
+    }
+
+    #c2 {
+        display: flex;
+    }
+
+    textarea {
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .img {
+        width: 100px;
+    }
+
+    li {
+        margin: 10px;
+
+    }
+
+    ul {
+        display: inline-flex;
 
 
+    }
 
-  }
-  #img {
-    width: 100px;
-    height: 100px;
+    #img {
+        width: 100px;
+        height: 100px;
 
-  }
+    }
 
 
 </style>
@@ -78,45 +88,90 @@
 <div></div>
 <div></div>
 <div id="a">
-  <h1>추천맛집</h1>
-  <hr>
-  {% for board in boards %}
-    <div id="c">
-      <div id="c1">
-        <h1 class="title">{{board.title}}</h1>
-        <div id="c2">
-          <div id="c3">
-            <h2 class="star">{{board.star}}</h2>
-            <h2 class="store">{{board.store_name}}</h2>
-          </div>
-          <img id="img" src="{{board.img}}">
+    <h1>추천맛집</h1>
+    <hr>
+
+    <div class="container">
+        <div class="row">
+
+            {% for i in range(0, boards.length) %}
+            <a href="/board/detail/{{boards[i].board_no}}">
+            <div class="col-sm-8 mt-3">
+                <div id="c">
+                    <div id="c1">
+                        <h1 class="title">{{boards[i].title}}</h1>
+                        <div id="c2">
+                            <div id="c3">
+                                <h2 class="star">{{boards[i].star}}</h2>
+                                <h2 class="store">{{boards[i].store_name}}</h2>
+                            </div>
+                            {% for j in range(0, boards[i].img.length) %}
+                            <div><img class="preview-images" width=100 src="{{ boards[i].img[j].url }}" accept="image/*"></div>
+                            {% endfor %}
+            </a>
+                        </div>
+                    </div>
+                    <h2><textarea name="" id="" cols="30" rows="10">{{board.content}}</textarea></h2>
+                    <form action="/write">
+                        <button type="submit">수정</button>
+                    </form>
+                </div>
+                {% endfor %}
+
+            </div>
+
         </div>
-      </div>
-      <h2><textarea name="" id="" cols="30" rows="10">{{board.content}}</textarea></h2>
+
+
+         <button><a href="/board">등록</a></button>
+<!--        {% if boards[i].img.length > 0 %}-->
+<!--        {% endif %}-->
+
     </div>
-  {% endfor %}
-  <!-- 페이지네이션을 구현할 HTML 코드 -->
-  <div class="pagination">
-    {% if currentPage > 1 %}
-    <a href="/boards?page={{currentPage-1}}">&laquo;</a>
-    {% endif %}
 
-    {% for i in pages %}
-    {% if currentPage == i %}
-    <span class="active">{{i}}</span>
-    {% else %}
-    <a href="/boards?page={{i}}">{{i}}</a>
-    {% endif %}
-    {% endfor %}
+<!--    <ul>-->
+<!--        -->
+<!--        <li>{{boards[i].title}}</li>-->
+<!--        <li>{{boards[i].store_name}}</li>-->
+<!--        <li>{{boards[i].nick}}</li>-->
+<!--        <li>{{boards[i].content}}</li>-->
+<!--        -->
+<!--        -->
+<!--    </ul>-->
 
-    {% if currentPage < totalPages %}
-    <a href="/boards?page={{currentPage+1}}">&raquo;</a>
-    {% endif %}
-  </div>
-  <article class="article">
-    <ul class="contents"></ul>
-    <div class="buttons"></div>
-  </article>
+
+
+    <div>
+        {% set start = (currentPage // 10) * 10 + 1 %}
+        {% set end = (currentPage // 10 + 1) * 10 %}
+
+
+        {% if start > 1 %}
+        <a href="/board/list?page=1">첫 페이지</a>
+        {% endif %}
+
+        {% if currentPage > 10 %}
+        <a href="/board/list?page={{ start - 1 }}">이전</a>
+        {% endif %}
+
+        {% for i in range(start, end + 1) %}
+        {% if i == currentPage %}
+        <strong style="font-size: 30px">{{ i }}</strong>
+        {% else %}
+        <a href="/board/list?page={{ i }}">{{ i }}</a>
+        {% endif %}
+        {% endfor %}
+
+        {% if end < totalPages %}
+        <a href="/board/list?page={{ end + 1 }}">다음</a>
+        {% endif %}
+
+        {% if end < totalPages - 9 %}
+        <a href="/board/list?page={{ totalPages }}">마지막 페이지</a>
+        {% endif %}
+    </div>
+
+
 </div>
 
 

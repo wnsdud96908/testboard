@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상세정보</title>
+</head>
+<body>
+{% for i in range(0, boards.length) %}
+<div id="c">
+  <div id="c1">
+    <h1 class="title">{{boards[i].title}}</h1>
+    <div id="c2">
+      <div id="c3">
+        <h2 class="star">{{boards[i].star}}</h2>
+        <h2 class="store">{{boards[i].store_name}}</h2>
+      </div>
+      {% for j in range(0, boards[i].img.length) %}
+      <div><img class="preview-images" width=100 src="{{ boards[i].img[j].url }}" accept="image/*"></div>
+      {% endfor %}
+    </div>
+  </div>
+  <h2><textarea name="" id="" cols="30" rows="10">{{board.content}}</textarea></h2>
+
+</div>
+{% endfor %}
+
+</body>
+</html>

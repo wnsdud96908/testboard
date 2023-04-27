@@ -2,55 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>게시판등록</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <style>
+        div.preview-images > img {
+            width: 30%;
+        }
+    </style>
 <body>
 <div id="board">
-    <form action="/board/list" method="post">
-    제목: <input type="text" name="title">
-    가게이름: <input type="text" name="store_name">
-    별점: <input type="text" name="star">
-    닉네임: <input type="text" name="nick">
-        <div class="img-preview">
-            <img id="img-preview" src="" alt="">
-            <input id="img-url" type="hidden" name="url">
+    <form method="post" enctype="multipart/form-data">
+        제목: <input type="text" name="title" id="title">
+        가게이름: <input type="text" name="store_name" id="store_name">
+        별점: <input type="text" name="star" id="star">
+        닉네임: <input type="text" name="nick" id="nick">
+        <!--        <div class="img-preview">-->
+        <!--            <img id="img-preview" src="" alt="">-->
+        <!--            <input id="img-url" type="hidden" name="url" multiple>-->
+        <!--        </div>-->
+        <!--    이미지: <input id="img" type="file" multiple accept="image/*">-->
+        내용: <input type="text" name="content" id="content">
+        <div class="form-group">
+            <label for="example-input-file"> </label>
+            <input type="file" name="multi-files" multiple id="input-multi-files" class="form-control-file border"/>
         </div>
-    이미지: <input id="img" type="file" accept="image/*">
-    내용: <input type="text" name="content">
-    <button type="submit">등록</button>
+        <button type="submit" class="btn btn-primary">등록</button>
     </form>
-
-
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="preview-images"></div>
+        </div>
     </div>
 
-</div>
-<script>
-    if(document.getElementById('img')){
-        document.getElementById('img').addEventListener('change',function(e){
-            const formData = new FormData();
-            console.log(this, this.files);
-            formData.append('img', this.files[0]);
-            axios.post('/board/img', formData)
-                .then((res) => {
-                    document.getElementById('img-url').value = res.data.url;
-                    document.getElementById('img-preview').src = res.data.url;
-                    document.getElementById('img-preview').style.display = 'inline';
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        });
-    }
 
-    // <div className="img-preview">
-    //     <img id="img-preview" src="" alt="">
-    //         <input id="img-url" type="text">
-    // </div>
+</div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        let imagesPreview = function (input, placeToInsertImagePreview) {
+            if (input.files) {
+                let filesAmount = input.files.length;
+                for (i = 0; i < filesAmount; i++) {
+                    let reader = new FileReader();
+                    reader.onload = function (event) {
+                        $($.parseHTML("<img>"))
+                            .attr("src", event.target.result)
+                            .appendTo(placeToInsertImagePreview);
+                    };
+                    reader.readAsDataURL(input.files[i]);
+                }
+            }
+        };
+        $("#input-multi-files").on("change", function () {
+            imagesPreview(this, "div.preview-images");
+        });
+    });
+
+
+    const form = document.querySelector('form');
+    const titleInput = document.querySelector('#title');
+    const storeNameInput = document.querySelector('#store_name');
+    const starInput = document.querySelector('#star');
+    const nickInput = document.querySelector('#nick');
+    const contentInput = document.querySelector('#content');
+    const fileInput = document.querySelector('#input-multi-files');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('title', titleInput.value);
+        formData.append('store_name', storeNameInput.value);
+        formData.append('star', starInput.value);
+        formData.append('nick', nickInput.value);
+        formData.append('content', contentInput.value);
+        for (const file of fileInput.files) {
+            formData.append('files', file);
+        }
+
+
+        await axios.post('/board/multiple-upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then((req, res, next) => {
+            console.log("5555555555", req.data.url);
+            location.href='/board/list';
+        }).catch((error) => {
+            console.error(error);
+        });
+
+    });
 
 </script>
-
 
 </body>
 </html>
