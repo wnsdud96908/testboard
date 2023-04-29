@@ -40,7 +40,8 @@ exports.renderBoard = async (req, res, next) => {
         //   };
         //
 
-        let img =boards[0].img[0].url;
+
+
         console.log(boards.length);
         for(let i =0; i < boards.length; i++){
           // for(const files in upload[i]) {
@@ -69,30 +70,7 @@ exports.renderBoard = async (req, res, next) => {
 
 
 };
-// 수정
-// exports.renderUpdate = async (req, res, next) => {
-//     try{
-//         const boards = await board.findOne({board_no: req.params.board_no});
-//         const {title, store_name, star, nick, content, img} = req.body;
-//
-//         if(!boards){
-//             return res.redirect('/');
-//         }
-//         boards.title = title;
-//         boards.store_name = store_name;
-//         boards.star = star;
-//         boards.nick = nick;
-//         boards.content = content;
-//         boards.img = img;
-//
-//         await boards.save();
-//         res.redirect(`/board/${boards.board_no}`);
-//     }catch (err){
-//         console.error(err);
-//         next(err);
-//     }
-//
-// }
+
 
 //이미지 구현
 

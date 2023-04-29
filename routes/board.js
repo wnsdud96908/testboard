@@ -11,27 +11,26 @@ const router = express.Router();
 router.get('/', (req,res) => {
     res.render('board');
 })
-router.get('/detail/:boards', (req, res) => {
-
-
+router.get('/detail/:board_no', async (req, res) => {
+    const board_no = req.params.board_no;
+    console.log("22222222222", req.params.board_no);
+    const boards = await board.findOne({
+        where: {board_no}
+    })
+     res.render("detail",{boards});
 
 
 })
 
 router.get('/list', renderBoard);
 
-// router.get('/write', async(req, res, next) => {
-//    try{
-//        const boards = await board.findOne({board_no: req.params.board_no});
-//        res.render('/write', {boards});
-//    } catch(err){
-//        console.error(err);
-//        next(err);
-//    }
-//
-// });
-
-
+router.post('/delete/:board_no', async (req, res) => {
+    const boardNo = req.params.board_no;
+    await board.destroy({
+        where: { board_no: boardNo }
+    });
+    res.redirect('/board/list');
+});
 
 
 try {

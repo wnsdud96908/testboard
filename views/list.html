@@ -85,8 +85,6 @@
 
 </style>
 <body>
-<div></div>
-<div></div>
 <div id="a">
     <h1>추천맛집</h1>
     <hr>
@@ -96,102 +94,64 @@
 
             {% for i in range(0, boards.length) %}
             <a href="/board/detail/{{boards[i].board_no}}">
-            <div class="col-sm-8 mt-3">
-                <div id="c">
-                    <div id="c1">
-                        <h1 class="title">{{boards[i].title}}</h1>
-                        <div id="c2">
-                            <div id="c3">
-                                <h2 class="star">{{boards[i].star}}</h2>
-                                <h2 class="store">{{boards[i].store_name}}</h2>
-                            </div>
-                            {% for j in range(0, boards[i].img.length) %}
-                            <div><img class="preview-images" width=100 src="{{ boards[i].img[j].url }}" accept="image/*"></div>
-                            {% endfor %}
-            </a>
-                        </div>
-                    </div>
-                    <h2><textarea name="" id="" cols="30" rows="10">{{board.content}}</textarea></h2>
-                    <form action="/write">
-                        <button type="submit">수정</button>
-                    </form>
-                </div>
-                {% endfor %}
+                <div class="col-sm-8 mt-3">
+                    <div id="c">
+                        <div id="c1">
+                            <h1 class="title">{{boards[i].title}}</h1>
+                            <div id="c2">
+                                <div id="c3">
+                                    <h2 class="star">{{boards[i].star}}</h2>
+                                    <h2 class="store">{{boards[i].store_name}}</h2>
+                                </div>
+                                {% if boards[i].img.length > 0 %}
+                                <div><img class="preview-images" width=100 src="{{ boards[i].img[0].url }}" accept="image/*"></div>
+                                {% endif %}
+                                 </a>
+                             </div>
 
+                        </div>
+                        <h2><textarea name="" id="" cols="30" rows="10">{{boards[i].content}}</textarea></h2>
+                        <form action="/board/delete/{{boards[i].board_no}}" method="post"><button>삭제</button></form>
+                    </div>
+                {% endfor %}
+                </div>
             </div>
 
-        </div>
-
-
-         <button><a href="/board">등록</a></button>
-<!--        {% if boards[i].img.length > 0 %}-->
-<!--        {% endif %}-->
-
-    </div>
-
-<!--    <ul>-->
-<!--        -->
-<!--        <li>{{boards[i].title}}</li>-->
-<!--        <li>{{boards[i].store_name}}</li>-->
-<!--        <li>{{boards[i].nick}}</li>-->
-<!--        <li>{{boards[i].content}}</li>-->
-<!--        -->
-<!--        -->
-<!--    </ul>-->
-
-
+        <button><a href="/board">등록</a></button>
 
     <div>
-        {% set start = (currentPage // 10) * 10 + 1 %}
-        {% set end = (currentPage // 10 + 1) * 10 %}
+    {% set start = ((currentPage - 1) // 10) * 10 + 1 %}
+    {% set end = ((currentPage - 1) // 10 + 1) * 10 %}
 
+    {% if start > 1 %}
+    <a href="/board/list?page=1">첫 페이지</a>
+    {% endif %}
 
-        {% if start > 1 %}
-        <a href="/board/list?page=1">첫 페이지</a>
-        {% endif %}
+    {% if currentPage > 10 %}
+    <a href="/board/list?page={{ start - 1 }}">이전</a>
+    {% endif %}
 
-        {% if currentPage > 10 %}
-        <a href="/board/list?page={{ start - 1 }}">이전</a>
-        {% endif %}
+    {% if end > totalPages %}
+    {% set end = totalPages %}
+    {% endif %}
 
-        {% for i in range(start, end + 1) %}
-        {% if i == currentPage %}
-        <strong style="font-size: 30px">{{ i }}</strong>
-        {% else %}
-        <a href="/board/list?page={{ i }}">{{ i }}</a>
-        {% endif %}
-        {% endfor %}
+    {% for i in range(start, end + 1) %}
+    {% if i == currentPage %}
+    <strong style="font-size: 30px">{{ i }}</strong>
+    {% else %}
+    <a href="/board/list?page={{ i }}">{{ i }}</a>
+    {% endif %}
+    {% endfor %}
 
-        {% if end < totalPages %}
-        <a href="/board/list?page={{ end + 1 }}">다음</a>
-        {% endif %}
+    {% if end < totalPages %}
+    <a href="/board/list?page={{ end + 1 }}">다음</a>
+    {% endif %}
 
-        {% if end < totalPages - 9 %}
-        <a href="/board/list?page={{ totalPages }}">마지막 페이지</a>
-        {% endif %}
+    {% if end < totalPages - 9 %}
+    <a href="/board/list?page={{ totalPages }}">마지막 페이지</a>
+    {% endif %}
     </div>
-
-
 </div>
-
-
-<!--<form action="" method="">-->
-<!--<div id = "board-list">-->
-<!--  {% for board in boards %}-->
-<!--  <div id="list">-->
-<!--    {{board.board_no}}-->
-<!--    {{board.title}}-->
-<!--    {{board.store_name}}-->
-<!--    {{board.star}}-->
-<!--    {{board.nick}}-->
-<!--    {{board.content}}-->
-<!--    <img src="{{board.img}}">-->
-<!--  </div>-->
-<!--  {% endfor %}-->
-<!--</div>-->
-<!--<button><a href="">버튼</a></button>-->
-<!--<script src="/board.js"></script>-->
-<!--</form>-->
 </body>
 <script>
 
